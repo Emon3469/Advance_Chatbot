@@ -30,6 +30,7 @@ backend/
     agents.py    Agent personas and system prompt
     config.py    Settings from environment variables
   requirements.txt
+  Dockerfile      Production image for Render
 frontend/
   src/app         Layout, page, favicon
   src/components  UI components
@@ -61,6 +62,17 @@ npm run dev
 ```
 
 Open http://localhost:3000.
+
+## Docker
+
+The backend ships with a `Dockerfile` that builds the same image Render runs:
+
+```bash
+docker build -t nexio-backend ./backend
+docker run --rm -p 8000:8000 --env-file backend/.env nexio-backend
+```
+
+Render injects `PORT` at runtime; the image falls back to 8000 so local runs need no extra flags. The SQLite store and the document indexes are written to `DATA_DIR` (`/app/data`), so mount a volume there to keep data across container restarts.
 
 ## Environment variables
 

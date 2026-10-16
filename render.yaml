@@ -1,16 +1,15 @@
 services:
   - type: web
     name: nexio-ai-backend
-    runtime: python
+    runtime: docker
     plan: free
     rootDir: backend
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips="*" --timeout-keep-alive 75
+    # Paths are relative to rootDir; the start command lives in the Dockerfile CMD.
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.13.5
       - key: APP_NAME
         value: Nexio AI
       - key: LLM_PROVIDER_ORDER
